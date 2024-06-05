@@ -1,6 +1,3 @@
-/*
- * Caracol Electronics 2020
- */
 bool bandera = true;
 
 TaskHandle_t Tarea1;
