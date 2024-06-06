@@ -1,0 +1,45 @@
+function doGet(e) {
+  var sheetId = 'id'; // Reemplaza con el ID de la hoja de cálculo
+  let sheetName = 'exp1';
+  var sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+  // Filas desde la 3 a la 5, y la columna 2 (segunda columna)
+  var rowsToRead = [3, 4, 5,6];
+  var columnToRead = 2; // Segunda columna
+
+  var valuesToReturn = [];
+
+  for (var i = 0; i < rowsToRead.length; i++) {
+    var row = rowsToRead[i];
+    var value = sheet.getRange(row, columnToRead).getValue();
+    valuesToReturn.push(value);
+  }
+
+  // Devuelve los valores en formato JSON
+  var response = {
+    values: valuesToReturn
+  };
+
+  return ContentService.createTextOutput(JSON.stringify(response)).setMimeType(ContentService.MimeType.JSON);
+}
+
+function doPost(e) {
+  try {
+    var sheetId = 'id'; // Reemplaza con el ID de la hoja de cálculo
+    var sheetName = 'exp1';
+    var data = JSON.parse(e.postData.contents);
+    let sheet = SpreadsheetApp.openById(sheetId).getSheetByName(sheetName);
+
+    // Agregar una nueva fila con los valores
+    var lastRow = sheet.getLastRow();
+    sheet.getRange(3,2).setValue(data[0]);
+    sheet.getRange(4,2).setValue(data[1]);
+    sheet.getRange(5,2).setValue(data[2]);
+    sheet.getRange(6,2).setValue(data[3]);
+
+    return ContentService.createTextOutput("Fila agregada correctamente").setMimeType(ContentService.MimeType.TEXT);  
+  } catch (error) {
+    return ContentService.createTextOutput("Error: " + error.message).setMimeType(ContentService.MimeType.TEXT);
+  }
+}
+
